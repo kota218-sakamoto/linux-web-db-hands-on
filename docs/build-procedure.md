@@ -213,7 +213,7 @@ sudo nano /etc/postgresql/18/main/postgresql.conf
 `listen_addresses` を設定します。
 
 ```conf
-listen_addresses = '*'
+listen_addresses = 'localhost,192.168.100.20'
 ```
 
 これにより、ローカルホスト以外からのPostgreSQL接続を受け付けられるようにします。

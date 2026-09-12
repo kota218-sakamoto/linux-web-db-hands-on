@@ -83,7 +83,7 @@ WEB01からDB01へ接続できるように、PostgreSQL側で接続元を制御�
 ### postgresql.conf
 
 ```conf
-listen_addresses = '*'
+listen_addresses = 'localhost,192.168.100.20'
 ```
 
 ### pg_hba.conf
