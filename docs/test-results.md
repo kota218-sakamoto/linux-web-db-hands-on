@@ -2,7 +2,7 @@
 
 ## 1. 試験概要
 
-WEB01 / DB01 の構築後、各サービスの稼働状態、サーバー間通信、PostgreSQL接続、WebアプリケーションからのDBデータ取得を確認しました。
+WEB01 / DB01 の構築後、各サービスの稼働状態、サーバー間通信、PostgreSQL接続、WEBアプリケーションからのDBデータ取得を確認しました。
 
 また、ApacheおよびPostgreSQLを意図的に停止し、サービス停止時の影響確認、ログ確認、サービス復旧後の正常性確認を実施しました。
 
@@ -110,25 +110,25 @@ SELECT * FROM employees;
 | 2 | Tanaka | Network |
 | 3 | Suzuki | Cloud |
 
+確認結果：
+
+`employees` テーブルの中身を確認するために `SELECT * FROM employees;` を実行して、3件のデータが正常に取得できることを確認しました。
+
 ---
 
 ## 8. WEB / DB連携試験
 
-WEB01上で以下を実行しました。
+WEB01上で以下のコマンドを実行しました。
 
 ```bash
 curl http://localhost/dbtest.php
 ```
 
-PostgreSQLの`employees`テーブルから取得したデータがHTMLとして返却されることを確認しました。
+`dbtest.php` を実行し、PHPからDB01のPostgreSQLへ接続して、`employees` テーブルのデータがHTMLとして正常に返されることを確認しました。
 
 通信経路：
 
 ```text
-クライアント
-  |
-  | HTTP
-  v
 WEB01
 Apache / PHP
 192.168.100.10
@@ -140,23 +140,22 @@ PostgreSQL
 192.168.100.20
 ```
 
-これにより、Apache / PHPからPostgreSQLまでの一連の通信が正常に動作していることを確認しました。
+これにより、WEB01上のApache / PHPとDB01上のPostgreSQLが正常に連携していることを確認しました。
 
 ---
-
 ## 9. Apache障害・復旧試験
 
-WEB01上のApacheを意図的に停止し、Webサービスへの影響、ログ、および復旧後の動作を確認しました。
+WEB01上のApacheを意図的に停止し、WEBサービスへの影響、ログ、および復旧後の動作を確認しました。
 
 ### 試験結果
 
 | No. | 試験項目 | 期待結果 | 結果 |
 |---|---|---|---|
 | 1 | Apache停止 | `inactive (dead)`になる | OK |
-| 2 | Webアクセス確認 | HTTP接続に失敗する | OK |
+| 2 | WEBアクセス確認 | HTTP接続に失敗する | OK |
 | 3 | Apacheログ確認 | サービス停止ログを確認できる | OK |
 | 4 | Apache起動 | `active (running)`になる | OK |
-| 5 | Web復旧確認 | `dbtest.php`が正常表示される | OK |
+| 5 | WEB復旧確認 | `dbtest.php`が正常表示される | OK |
 
 ### 障害発生
 
@@ -171,13 +170,13 @@ systemctl status apache2
 Active: inactive (dead)
 ```
 
-Apache停止後、Webアクセスを確認しました。
+Apache停止後、WEBアクセスを確認しました。
 
 ```bash
 curl http://localhost/dbtest.php
 ```
 
-TCP/80への接続に失敗し、Webページへアクセスできないことを確認しました。
+TCP/80への接続に失敗し、WEBページへアクセスできないことを確認しました。
 
 ### ログ確認
 
@@ -200,13 +199,13 @@ systemctl status apache2
 Active: active (running)
 ```
 
-Webアプリケーションを再確認しました。
+WEBアプリケーションを再確認しました。
 
 ```bash
 curl http://localhost/dbtest.php
 ```
 
-`Employee List`および`employees`テーブルのデータが再表示され、Webサービスが正常に復旧したことを確認しました。
+`Employee List`および`employees`テーブルのデータが再表示され、WEBサービスが正常に復旧したことを確認しました。
 
 ### 確認証跡
 
@@ -222,7 +221,7 @@ curl http://localhost/dbtest.php
 
 ## 10. PostgreSQL障害・復旧試験
 
-DB01上のPostgreSQLを意図的に停止し、WEB01からのDB接続およびWebアプリケーションへの影響、ログ、復旧後の動作を確認しました。
+DB01上のPostgreSQLを意図的に停止し、WEB01からのDB接続およびWEBアプリケーションへの影響、ログ、復旧後の動作を確認しました。
 
 ### 試験結果
 
@@ -235,7 +234,7 @@ DB01上のPostgreSQLを意図的に停止し、WEB01からのDB接続およびWe
 | 5 | PostgreSQLログ確認 | サービス停止ログを確認できる | OK |
 | 6 | PostgreSQL起動 | `active (running)`になる | OK |
 | 7 | TCP/5432復旧確認 | WEB01から接続できる | OK |
-| 8 | Web/DB復旧確認 | `employees`のデータが再表示される | OK |
+| 8 | WEB / DB復旧確認 | `employees`のデータが再表示される | OK |
 
 ### 障害前正常確認
 
@@ -278,7 +277,7 @@ nc -zv 192.168.100.20 5432
 Connection refused
 ```
 
-続いて、WEB01のWebアプリケーションを確認しました。
+続いて、WEB01のWEBアプリケーションを確認しました。
 
 ```bash
 curl http://localhost/dbtest.php
@@ -290,7 +289,7 @@ curl http://localhost/dbtest.php
 Database connection failed.
 ```
 
-これにより、DBサービスの停止がWebアプリケーションに影響することを確認しました。
+これにより、DBサービスの停止がWEBアプリケーションに影響することを確認しました。
 
 ### ログ確認
 
@@ -321,13 +320,13 @@ nc -zv 192.168.100.20 5432
 
 TCP/5432への接続が成功することを確認しました。
 
-最後にWebアプリケーションを確認しました。
+最後にWEBアプリケーションを確認しました。
 
 ```bash
 curl http://localhost/dbtest.php
 ```
 
-`Employee List`および`employees`テーブルの3件のデータが再表示され、Web / DB連携が正常に復旧したことを確認しました。
+`Employee List`および`employees`テーブルの3件のデータが再表示され、WEB / DB連携が正常に復旧したことを確認しました。
 
 ### 確認証跡
 
@@ -337,7 +336,7 @@ curl http://localhost/dbtest.php
 
 #### WEBアプリケーション影響確認
 
-![PostgreSQL停止時のWeb影響確認](../evidence/postgresql-web-impact.png)
+![PostgreSQL停止時のWEB影響確認](../evidence/postgresql-web-impact.png)
 
 #### PostgreSQLログ・復旧確認
 
@@ -345,7 +344,7 @@ curl http://localhost/dbtest.php
 
 #### WEB / DB復旧確認
 
-![Web DB復旧確認](../evidence/postgresql-web-recovery.png)
+![WEB / DB復旧確認](../evidence/postgresql-web-recovery.png)
 
 ---
 
@@ -360,13 +359,13 @@ curl http://localhost/dbtest.php
 | WEB01 → DB01通信 | OK |
 | PostgreSQL接続 | OK |
 | PHP → PostgreSQL連携 | OK |
-| Web画面へのDBデータ表示 | OK |
+| WEB画面へのDBデータ表示 | OK |
 | Apache障害検知 | OK |
 | Apacheログ確認 | OK |
 | Apache復旧 | OK |
 | PostgreSQL障害検知 | OK |
-| PostgreSQL停止時のWeb影響確認 | OK |
+| PostgreSQL停止時のWEB影響確認 | OK |
 | PostgreSQLログ確認 | OK |
 | PostgreSQL復旧 | OK |
 
-今回の試験により、通常時のWeb / DB連携だけでなく、ApacheおよびPostgreSQLのサービス停止時に発生する影響を確認し、ログを用いた状態確認とサービス復旧後の正常性確認まで実施しました。
+今回の試験により、通常時のWEB / DB連携だけでなく、ApacheおよびPostgreSQLのサービス停止時に発生する影響を確認し、ログを用いた状態確認とサービス復旧後の正常性確認まで実施しました。
