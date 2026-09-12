@@ -11,5 +11,5 @@ host    replication   all          127.0.0.1/32        scram-sha-256
 host    replication   all          ::1/128             scram-sha-256
 
 # Allow WEB01 to connect to webappdb
-host    webappdb      webappuser   192.168.100.10/32   scram-sha-256
+host    webappdb      webuser   192.168.100.10/32   scram-sha-256
 host    webappdb      webuser      192.168.100.10/32   scram-sha-256

@@ -4,10 +4,10 @@
 
 VirtualBox上にUbuntu Serverを2台構築し、WebサーバーとDBサーバーを分離したWeb/DB環境を構築しました。
 
-* WEB01：Apache / PHP
-* DB01：PostgreSQL
-* WEB01からDB01へTCP/5432で接続
-* PHPからPostgreSQLのデータを取得してWebページへ表示
+- WEB01：Apache / PHP
+- DB01：PostgreSQL
+- WEB01からDB01へTCP/5432で接続
+- PHPからPostgreSQLのデータを取得してWebページへ表示
 
 構成は以下の通りです。
 
@@ -33,10 +33,10 @@ PostgreSQL
 
 ## 2. サーバー構成
 
-| Hostname | Role            | IP Address     |
-| -------- | --------------- | -------------- |
-| WEB01    | Web Server      | 192.168.100.10 |
-| DB01     | Database Server | 192.168.100.20 |
+| Hostname | Role | IP Address |
+|---|---|---|
+| WEB01 | Web Server | 192.168.100.10 |
+| DB01 | Database Server | 192.168.100.20 |
 
 ---
 
@@ -172,10 +172,9 @@ GRANT SELECT ON TABLE employees TO webuser;
 
 以下のテーブルが存在することを確認しました。
 
-| Table     | Owner      |
-| --------- | ---------- |
-| employees | postgres   |
-| users     | webappuser |
+| Table | Owner |
+|---|---|
+| employees | postgres |
 
 ### employees テーブル確認
 
@@ -185,23 +184,11 @@ SELECT * FROM employees;
 
 確認結果：
 
-| id | name   | department     |
-| -- | ------ | -------------- |
-| 1  | Sato   | Infrastructure |
-| 2  | Tanaka | Network        |
-| 3  | Suzuki | Cloud          |
-
-### users テーブル確認
-
-```sql
-SELECT * FROM users;
-```
-
-確認結果：
-
-| id | name     |
-| -- | -------- |
-| 1  | testuser |
+| id | name | department |
+|---|---|---|
+| 1 | Sato | Infrastructure |
+| 2 | Tanaka | Network |
+| 3 | Suzuki | Cloud |
 
 PostgreSQLから退出します。
 
@@ -215,4 +202,170 @@ PostgreSQLから退出します。
 
 WEB01からDB01のPostgreSQLへ接続できるように設定します。
 
-### postgresql.co
+### postgresql.conf 設定
+
+PostgreSQLの設定ファイルを編集します。
+
+```bash
+sudo nano /etc/postgresql/18/main/postgresql.conf
+```
+
+`listen_addresses` を設定します。
+
+```conf
+listen_addresses = '*'
+```
+
+これにより、ローカルホスト以外からのPostgreSQL接続を受け付けられるようにします。
+
+### pg_hba.conf 設定
+
+接続元をWEB01のみに制限するため、`pg_hba.conf` を編集します。
+
+```bash
+sudo nano /etc/postgresql/18/main/pg_hba.conf
+```
+
+以下を追加します。
+
+```conf
+host    webappdb    webuser    192.168.100.10/32    scram-sha-256
+```
+
+これにより、`webappdb`へ`webuser`で接続できるホストをWEB01（`192.168.100.10`）に限定します。
+
+### PostgreSQL 再起動
+
+設定を反映します。
+
+```bash
+sudo systemctl restart postgresql@18-main
+```
+
+状態を確認します。
+
+```bash
+systemctl status postgresql@18-main
+```
+
+`Active: active (running)` であることを確認します。
+
+---
+
+## 9. WEB01 → DB01 接続確認
+
+WEB01からDB01のPostgreSQLが使用するTCP/5432へ通信できることを確認します。
+
+```bash
+nc -zv 192.168.100.20 5432
+```
+
+TCP/5432への接続が成功することを確認しました。
+
+続いて、WEB01からPostgreSQLへ接続します。
+
+```bash
+psql -h 192.168.100.20 -U webuser -d webappdb
+```
+
+`webappdb` に接続できることを確認しました。
+
+接続後、`employees`テーブルを参照します。
+
+```sql
+SELECT * FROM employees;
+```
+
+以下のデータを取得できることを確認しました。
+
+| id | name | department |
+|---|---|---|
+| 1 | Sato | Infrastructure |
+| 2 | Tanaka | Network |
+| 3 | Suzuki | Cloud |
+
+---
+
+## 10. PHP → PostgreSQL 接続設定
+
+WEB01上のPHPからDB01のPostgreSQLへ接続します。
+
+接続情報は以下の通りです。
+
+| Parameter | Value |
+|---|---|
+| Host | 192.168.100.20 |
+| Port | 5432 |
+| Database | webappdb |
+| User | webuser |
+| Password | GitHub上では非公開 |
+
+PHPでは`pg_connect()`を使用してPostgreSQLへ接続します。
+
+```php
+$conn = pg_connect(
+    "host=$host port=$port dbname=$dbname user=$user password=$password"
+);
+```
+
+データベースのパスワードなどの認証情報はGitHub上には公開しません。
+
+---
+
+## 11. Web画面動作確認
+
+WEB01上で以下のコマンドを実行します。
+
+```bash
+curl http://localhost/dbtest.php
+```
+
+PostgreSQLの`employees`テーブルから取得したデータがHTMLとして表示されることを確認しました。
+
+確認したデータ：
+
+| id | name | department |
+|---|---|---|
+| 1 | Sato | Infrastructure |
+| 2 | Tanaka | Network |
+| 3 | Suzuki | Cloud |
+
+これにより、以下の一連の通信が正常に動作していることを確認しました。
+
+```text
+Client
+  |
+  | HTTP
+  v
+WEB01
+Ubuntu Server
+Apache / PHP
+192.168.100.10
+  |
+  | TCP/5432
+  v
+DB01
+Ubuntu Server
+PostgreSQL
+192.168.100.20
+```
+
+---
+
+## 12. 構築結果
+
+以下の項目が正常に動作することを確認しました。
+
+- Apacheの起動
+- PHPの実行
+- PostgreSQLの起動
+- `webappdb`データベースの作成
+- `webuser`ユーザーの作成
+- `employees`テーブルの作成
+- `webuser`への必要最小限の参照権限設定
+- WEB01からDB01へのTCP/5432接続
+- WEB01からPostgreSQLへのログイン
+- PHPからPostgreSQLへの接続
+- PostgreSQLから取得したデータのWebページ表示
+
+これにより、WebサーバーとDBサーバーを分離した基本的なWeb/DBシステムを構築し、ネットワーク疎通からアプリケーションレベルの動作まで確認しました。

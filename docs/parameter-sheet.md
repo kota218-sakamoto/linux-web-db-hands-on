@@ -54,14 +54,12 @@
 |---|---|
 | postgres | PostgreSQL administrator |
 | webuser | WEB01からのDB接続用 |
-| webappuser | usersテーブル所有者 |
 
 ### Tables
 
 | Schema | Table | Owner |
 |---|---|---|
 | public | employees | postgres |
-| public | users | webappuser |
 
 ---
 
@@ -78,7 +76,27 @@
 
 ---
 
-## 7. Service Check Commands
+## 7. PostgreSQL Remote Access
+
+WEB01からDB01へ接続できるように、PostgreSQL側で接続元を制御します。
+
+### postgresql.conf
+
+```conf
+listen_addresses = '*'
+```
+
+### pg_hba.conf
+
+```conf
+host    webappdb    webuser    192.168.100.10/32    scram-sha-256
+```
+
+接続元はWEB01（`192.168.100.10`）のみに限定します。
+
+---
+
+## 8. Service Check Commands
 
 ### WEB01
 
@@ -94,7 +112,7 @@ systemctl status postgresql@18-main
 
 ---
 
-## 8. Connectivity Check
+## 9. Connectivity Check
 
 WEB01からDB01のPostgreSQLポートへの疎通確認：
 

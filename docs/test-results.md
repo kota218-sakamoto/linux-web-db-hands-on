@@ -16,10 +16,9 @@ WEB01 / DB01 の構築後、各サービスの稼働状態、サーバー間通�
 | 2 | PostgreSQL稼働確認 | `systemctl status postgresql@18-main` | `active (running)` | PASS |
 | 3 | WEB01 → DB01 ポート疎通 | `nc -zv 192.168.100.20 5432` | TCP/5432への接続成功 | PASS |
 | 4 | WEB01 → PostgreSQL接続 | `psql -h 192.168.100.20 -U webuser -d webappdb` | `webappdb`へ接続成功 | PASS |
-| 5 | テーブル確認 | `\dt` | `employees` / `users` が表示される | PASS |
+| 5 | テーブル確認 | `\dt` | `employees` が表示される | PASS |
 | 6 | employeesデータ確認 | `SELECT * FROM employees;` | 3件のテストデータが表示される | PASS |
-| 7 | usersデータ確認 | `SELECT * FROM users;` | `testuser` が表示される | PASS |
-| 8 | Web動作確認 | `curl http://localhost/dbtest.php` | DBデータを含むHTMLが返却される | PASS |
+| 7 | Web動作確認 | `curl http://localhost/dbtest.php` | DBデータを含むHTMLが返却される | PASS |
 
 ---
 
@@ -96,7 +95,6 @@ psql -h 192.168.100.20 -U webuser -d webappdb
 | Schema | Table | Owner |
 |---|---|---|
 | public | employees | postgres |
-| public | users | webappuser |
 
 ### employees
 
@@ -111,18 +109,6 @@ SELECT * FROM employees;
 | 1 | Sato | Infrastructure |
 | 2 | Tanaka | Network |
 | 3 | Suzuki | Cloud |
-
-### users
-
-```sql
-SELECT * FROM users;
-```
-
-確認結果：
-
-| id | name |
-|---|---|
-| 1 | testuser |
 
 ---
 
@@ -174,15 +160,8 @@ WEB01上のApacheを意図的に停止し、Webサービスへの影響、ログ
 
 ### 障害発生
 
-Apacheを停止しました。
-
 ```bash
 sudo systemctl stop apache2
-```
-
-状態を確認しました。
-
-```bash
 systemctl status apache2
 ```
 
@@ -210,15 +189,8 @@ Apacheサービスが停止されたことをログから確認しました。
 
 ### 復旧
 
-Apacheを起動しました。
-
 ```bash
 sudo systemctl start apache2
-```
-
-状態を確認しました。
-
-```bash
 systemctl status apache2
 ```
 
@@ -283,15 +255,8 @@ sudo -u postgres psql -d webappdb -c "SELECT * FROM employees;"
 
 ### 障害発生
 
-PostgreSQLを停止しました。
-
 ```bash
 sudo systemctl stop postgresql@18-main
-```
-
-状態を確認しました。
-
-```bash
 systemctl status postgresql@18-main
 ```
 
@@ -303,8 +268,6 @@ Active: inactive (dead)
 
 ### WEB01からの影響確認
 
-WEB01からDB01のTCP/5432へ接続しました。
-
 ```bash
 nc -zv 192.168.100.20 5432
 ```
@@ -314,8 +277,6 @@ nc -zv 192.168.100.20 5432
 ```text
 Connection refused
 ```
-
-PostgreSQL停止中はTCP/5432へ接続できないことを確認しました。
 
 続いて、WEB01のWebアプリケーションを確認しました。
 
@@ -333,25 +294,16 @@ Database connection failed.
 
 ### ログ確認
 
-DB01でPostgreSQLのサービスログを確認しました。
-
 ```bash
 sudo journalctl -u postgresql@18-main --since "10 minutes ago" --no-pager
 ```
 
-PostgreSQLサービスの停止処理が正常に実行されたことを確認しました。
+PostgreSQLサービスの停止処理が実行されたことをログから確認しました。
 
 ### 復旧
 
-PostgreSQLを起動しました。
-
 ```bash
 sudo systemctl start postgresql@18-main
-```
-
-状態を確認しました。
-
-```bash
 systemctl status postgresql@18-main
 ```
 
