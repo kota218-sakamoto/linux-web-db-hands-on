@@ -1,0 +1,4 @@
+# PostgreSQL network settings
+
+listen_addresses = 'localhost,192.168.100.20'
+port = 5432
