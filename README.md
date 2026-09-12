@@ -1,4 +1,4 @@
-# Linux Web/DB Server Hands-on
+# Linux Web/DBサーバー構築ハンズオン
 
 Ubuntu Serverを使用して、WebサーバーとDBサーバーを分離したWeb/DB環境を構築したハンズオンです。
 
@@ -162,65 +162,65 @@ sudo journalctl -u postgresql@18-main --since "10 minutes ago" --no-pager
 sudo systemctl start postgresql@18-main
 ```
 
-詳細な試験結果は [Test Results](docs/test-results.md) に記載しています。
+詳細な試験結果は [試験結果](docs/test-results.md) に記載しています。
 
-## Screenshots
+## 実行結果・スクリーンショット
 
-### Web / Database Integration
+### Web / DB連携結果
 
 PHPからPostgreSQLの`employees`テーブルを参照し、Webページにデータを表示できることを確認しました。
 
-![Web Page](images/web-page.png)
+![Web / DB連携画面](images/web-page.png)
 
-### WEB01 → DB01 Connectivity
+### WEB01 → DB01 疎通確認
 
 WEB01からDB01のPostgreSQL（TCP/5432）への疎通、および`psql`によるDB接続を確認しました。
 
-![WEB01 DB Connectivity](images/web01-db-connectivity.png)
+![WEB01 → DB01 疎通確認](images/web01-db-connectivity.png)
 
-### PostgreSQL Check
+### PostgreSQL動作確認
 
 DB01上でPostgreSQLクラスタが稼働していること、および`employees`テーブルからデータを取得できることを確認しました。
 
-![DB01 PostgreSQL Check](images/db01-postgresql-check.png)
+![DB01 PostgreSQL動作確認](images/db01-postgresql-check.png)
 
-## Documents
+## 関連ドキュメント
 
-- [Build Procedure](docs/build-procedure.md)
-- [Parameter Sheet](docs/parameter-sheet.md)
-- [Test Results](docs/test-results.md)
+- [構築手順書](docs/build-procedure.md)
+- [パラメータシート](docs/parameter-sheet.md)
+- [試験結果](docs/test-results.md)
 
-## Configuration Examples
+## 設定ファイル例
 
-- [Apache Configuration](configs/apache/README.md)
-- [Apache VirtualHost Example](configs/apache/000-default.conf.example)
-- [PostgreSQL Configuration](configs/postgresql/postgresql.conf.example)
-- [PostgreSQL Access Control](configs/postgresql/pg_hba.conf.example)
+- [Apache設定](configs/apache/README.md)
+- [Apache VirtualHost設定例](configs/apache/000-default.conf.example)
+- [PostgreSQL設定例](configs/postgresql/postgresql.conf.example)
+- [PostgreSQL接続制御設定例](configs/postgresql/pg_hba.conf.example)
 
-## Scripts
+## サンプルスクリプト
 
-- [PHP Database Connection Sample](scripts/dbtest.php)
+- [PHP DB接続サンプル](scripts/dbtest.php)
 
 DB接続パスワードなどの認証情報はGitHub上には公開していません。
 
-## Evidence
+## 確認証跡
 
-### Normal Operation
+### 正常系確認
 
-- [WEB01 Check](evidence/web01-check.txt)
-- [DB01 Check](evidence/db01-check.txt)
-- [Connectivity Check](evidence/connectivity-check.txt)
+- [WEB01動作確認](evidence/web01-check.txt)
+- [DB01動作確認](evidence/db01-check.txt)
+- [WEB01 → DB01 疎通確認](evidence/connectivity-check.txt)
 
-### Failure / Recovery Test
+### 障害・復旧試験
 
-- [Apache Failure](evidence/apache-failure.png)
-- [Apache Recovery](evidence/apache-recovery.png)
-- [PostgreSQL Failure](evidence/postgresql-failure.png)
-- [PostgreSQL Web Impact](evidence/postgresql-web-impact.png)
-- [PostgreSQL Log / Recovery](evidence/postgresql-log-recovery.png)
-- [PostgreSQL Web Recovery](evidence/postgresql-web-recovery.png)
+- [Apache障害確認](evidence/apache-failure.png)
+- [Apache復旧確認](evidence/apache-recovery.png)
+- [PostgreSQL障害確認](evidence/postgresql-failure.png)
+- [PostgreSQL停止時のWeb影響](evidence/postgresql-web-impact.png)
+- [PostgreSQLログ・復旧確認](evidence/postgresql-log-recovery.png)
+- [Web / DB連携復旧確認](evidence/postgresql-web-recovery.png)
 
-## Repository Structure
+## リポジトリ構成
 
 ```text
 linux-web-db-hands-on/
@@ -275,7 +275,7 @@ linux-web-db-hands-on/
 - サービス障害後の復旧および正常性確認
 - 構築手順書、パラメータシート、試験結果、Evidenceの作成
 
-## Notes
+## 補足
 
 本リポジトリは、Linux / Web / Databaseの基本的な構築・設定・疎通確認、および障害・復旧確認を目的とした学習用ハンズオンです。
 
