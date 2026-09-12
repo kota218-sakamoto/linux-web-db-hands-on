@@ -1,0 +1,28 @@
+DB01
+--- PostgreSQL ---
+active
+--- PostgreSQL Cluster ---
+Ver Cluster Port Status Owner    Data directory              Log file
+18  main    5432 online postgres /var/lib/postgresql/18/main /var/log/postgresql/postgresql-18-main.log
+--- Database ---
+             List of tables
+ Schema |   Name    | Type  |   Owner    
+--------+-----------+-------+------------
+ public | employees | table | postgres
+ public | users     | table | webappuser
+(2 rows)
+
+--- employees ---
+ id |  name  |   department   
+----+--------+----------------
+  1 | Sato   | Infrastructure
+  2 | Tanaka | Network
+  3 | Suzuki | Cloud
+(3 rows)
+
+--- users ---
+ id |   name   
+----+----------
+  1 | testuser
+(1 row)
+
