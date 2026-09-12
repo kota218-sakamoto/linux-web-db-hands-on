@@ -1,4 +1,4 @@
-# Test Results
+# 試験結果
 
 ## 1. 試験概要
 
@@ -10,19 +10,19 @@ WEB01 / DB01 の構築後、各サービスの稼働状態、サーバー間通�
 
 ## 2. 正常系試験結果
 
-| No. | Test Item | Command / Method | Expected Result | Result |
+| No. | 試験項目 | コマンド / 確認方法 | 期待結果 | 結果 |
 |---|---|---|---|---|
-| 1 | Apache稼働確認 | `systemctl status apache2` | `active (running)` | PASS |
-| 2 | PostgreSQL稼働確認 | `systemctl status postgresql@18-main` | `active (running)` | PASS |
-| 3 | WEB01 → DB01 ポート疎通 | `nc -zv 192.168.100.20 5432` | TCP/5432への接続成功 | PASS |
-| 4 | WEB01 → PostgreSQL接続 | `psql -h 192.168.100.20 -U webuser -d webappdb` | `webappdb`へ接続成功 | PASS |
-| 5 | テーブル確認 | `\dt` | `employees` が表示される | PASS |
-| 6 | employeesデータ確認 | `SELECT * FROM employees;` | 3件のテストデータが表示される | PASS |
-| 7 | Web動作確認 | `curl http://localhost/dbtest.php` | DBデータを含むHTMLが返却される | PASS |
+| 1 | Apache稼働確認 | `systemctl status apache2` | `active (running)` | OK |
+| 2 | PostgreSQL稼働確認 | `systemctl status postgresql@18-main` | `active (running)` | OK |
+| 3 | WEB01 → DB01 ポート疎通 | `nc -zv 192.168.100.20 5432` | TCP/5432への接続成功 | OK |
+| 4 | WEB01 → PostgreSQL接続 | `psql -h 192.168.100.20 -U webuser -d webappdb` | `webappdb`へ接続成功 | OK |
+| 5 | テーブル確認 | `\dt` | `employees` が表示される | OK |
+| 6 | employeesデータ確認 | `SELECT * FROM employees;` | 3件のテストデータが表示される | OK |
+| 7 | Web動作確認 | `curl http://localhost/dbtest.php` | DBデータを含むHTMLが返却される | OK |
 
 ---
 
-## 3. Apache 稼働確認
+## 3. Apache稼働確認
 
 WEB01で以下を実行しました。
 
@@ -40,7 +40,7 @@ Apacheが正常に稼働していることを確認しました。
 
 ---
 
-## 4. PostgreSQL 稼働確認
+## 4. PostgreSQL稼働確認
 
 DB01で以下を実行しました。
 
@@ -82,7 +82,7 @@ psql -h 192.168.100.20 -U webuser -d webappdb
 
 ---
 
-## 7. Database Test
+## 7. データベース確認
 
 ### テーブル一覧
 
@@ -92,7 +92,7 @@ psql -h 192.168.100.20 -U webuser -d webappdb
 
 確認結果：
 
-| Schema | Table | Owner |
+| スキーマ | テーブル | 所有者 |
 |---|---|---|
 | public | employees | postgres |
 
@@ -112,7 +112,7 @@ SELECT * FROM employees;
 
 ---
 
-## 8. Web / Database Integration Test
+## 8. WEB / DB連携試験
 
 WEB01上で以下を実行しました。
 
@@ -125,7 +125,7 @@ PostgreSQLの`employees`テーブルから取得したデータがHTMLとして�
 通信経路：
 
 ```text
-Client
+クライアント
   |
   | HTTP
   v
@@ -144,19 +144,19 @@ PostgreSQL
 
 ---
 
-## 9. Apache Failure / Recovery Test
+## 9. Apache障害・復旧試験
 
 WEB01上のApacheを意図的に停止し、Webサービスへの影響、ログ、および復旧後の動作を確認しました。
 
 ### 試験結果
 
-| No. | Test Item | Expected Result | Result |
+| No. | 試験項目 | 期待結果 | 結果 |
 |---|---|---|---|
-| 1 | Apache停止 | `inactive (dead)`になる | PASS |
-| 2 | Webアクセス確認 | HTTP接続に失敗する | PASS |
-| 3 | Apacheログ確認 | サービス停止ログを確認できる | PASS |
-| 4 | Apache起動 | `active (running)`になる | PASS |
-| 5 | Web復旧確認 | `dbtest.php`が正常表示される | PASS |
+| 1 | Apache停止 | `inactive (dead)`になる | OK |
+| 2 | Webアクセス確認 | HTTP接続に失敗する | OK |
+| 3 | Apacheログ確認 | サービス停止ログを確認できる | OK |
+| 4 | Apache起動 | `active (running)`になる | OK |
+| 5 | Web復旧確認 | `dbtest.php`が正常表示される | OK |
 
 ### 障害発生
 
@@ -208,34 +208,34 @@ curl http://localhost/dbtest.php
 
 `Employee List`および`employees`テーブルのデータが再表示され、Webサービスが正常に復旧したことを確認しました。
 
-### Evidence
+### 確認証跡
 
-#### Apache Failure
+#### Apache停止確認
 
-![Apache Failure](../evidence/apache-failure.png)
+![Apache停止確認](../evidence/apache-failure.png)
 
-#### Apache Recovery
+#### Apache復旧確認
 
-![Apache Recovery](../evidence/apache-recovery.png)
+![Apache復旧確認](../evidence/apache-recovery.png)
 
 ---
 
-## 10. PostgreSQL Failure / Recovery Test
+## 10. PostgreSQL障害・復旧試験
 
 DB01上のPostgreSQLを意図的に停止し、WEB01からのDB接続およびWebアプリケーションへの影響、ログ、復旧後の動作を確認しました。
 
 ### 試験結果
 
-| No. | Test Item | Expected Result | Result |
+| No. | 試験項目 | 期待結果 | 結果 |
 |---|---|---|---|
-| 1 | PostgreSQL正常確認 | `employees`テーブルを参照できる | PASS |
-| 2 | PostgreSQL停止 | `inactive (dead)`になる | PASS |
-| 3 | TCP/5432接続確認 | WEB01からの接続に失敗する | PASS |
-| 4 | PHP動作確認 | DB接続に失敗する | PASS |
-| 5 | PostgreSQLログ確認 | サービス停止ログを確認できる | PASS |
-| 6 | PostgreSQL起動 | `active (running)`になる | PASS |
-| 7 | TCP/5432復旧確認 | WEB01から接続できる | PASS |
-| 8 | Web/DB復旧確認 | `employees`のデータが再表示される | PASS |
+| 1 | PostgreSQL正常確認 | `employees`テーブルを参照できる | OK |
+| 2 | PostgreSQL停止 | `inactive (dead)`になる | OK |
+| 3 | TCP/5432接続確認 | WEB01からの接続に失敗する | OK |
+| 4 | PHP動作確認 | DB接続に失敗する | OK |
+| 5 | PostgreSQLログ確認 | サービス停止ログを確認できる | OK |
+| 6 | PostgreSQL起動 | `active (running)`になる | OK |
+| 7 | TCP/5432復旧確認 | WEB01から接続できる | OK |
+| 8 | Web/DB復旧確認 | `employees`のデータが再表示される | OK |
 
 ### 障害前正常確認
 
@@ -329,44 +329,44 @@ curl http://localhost/dbtest.php
 
 `Employee List`および`employees`テーブルの3件のデータが再表示され、Web / DB連携が正常に復旧したことを確認しました。
 
-### Evidence
+### 確認証跡
 
-#### PostgreSQL Failure
+#### PostgreSQL停止確認
 
-![PostgreSQL Failure](../evidence/postgresql-failure.png)
+![PostgreSQL停止確認](../evidence/postgresql-failure.png)
 
-#### Web Application Impact
+#### WEBアプリケーション影響確認
 
-![PostgreSQL Web Impact](../evidence/postgresql-web-impact.png)
+![PostgreSQL停止時のWeb影響確認](../evidence/postgresql-web-impact.png)
 
-#### PostgreSQL Log / Recovery
+#### PostgreSQLログ・復旧確認
 
-![PostgreSQL Log Recovery](../evidence/postgresql-log-recovery.png)
+![PostgreSQLログ・復旧確認](../evidence/postgresql-log-recovery.png)
 
-#### Web / Database Recovery
+#### WEB / DB復旧確認
 
-![PostgreSQL Web Recovery](../evidence/postgresql-web-recovery.png)
+![Web DB復旧確認](../evidence/postgresql-web-recovery.png)
 
 ---
 
-## 11. Test Summary
+## 11. 試験結果まとめ
 
 正常系試験および障害・復旧試験を実施し、すべての試験項目で期待した結果を確認しました。
 
-| Category | Result |
+| 試験カテゴリ | 結果 |
 |---|---|
-| Apache稼働確認 | PASS |
-| PostgreSQL稼働確認 | PASS |
-| WEB01 → DB01通信 | PASS |
-| PostgreSQL接続 | PASS |
-| PHP → PostgreSQL連携 | PASS |
-| Web画面へのDBデータ表示 | PASS |
-| Apache障害検知 | PASS |
-| Apacheログ確認 | PASS |
-| Apache復旧 | PASS |
-| PostgreSQL障害検知 | PASS |
-| PostgreSQL停止時のWeb影響確認 | PASS |
-| PostgreSQLログ確認 | PASS |
-| PostgreSQL復旧 | PASS |
+| Apache稼働確認 | OK |
+| PostgreSQL稼働確認 | OK |
+| WEB01 → DB01通信 | OK |
+| PostgreSQL接続 | OK |
+| PHP → PostgreSQL連携 | OK |
+| Web画面へのDBデータ表示 | OK |
+| Apache障害検知 | OK |
+| Apacheログ確認 | OK |
+| Apache復旧 | OK |
+| PostgreSQL障害検知 | OK |
+| PostgreSQL停止時のWeb影響確認 | OK |
+| PostgreSQLログ確認 | OK |
+| PostgreSQL復旧 | OK |
 
 今回の試験により、通常時のWeb / DB連携だけでなく、ApacheおよびPostgreSQLのサービス停止時に発生する影響を確認し、ログを用いた状態確認とサービス復旧後の正常性確認まで実施しました。
