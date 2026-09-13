@@ -9,7 +9,7 @@ Apache / PHPを稼働させるWEB01と、PostgreSQLを稼働させるDB01を分�
 ## 構成
 
 ```text
-Client
+クライアント
   |
   | HTTP / TCP 80
   v
@@ -69,9 +69,9 @@ PostgreSQL 18
 
 | 送信元 | 宛先 | プロトコル / ポート | 用途 |
 |---|---|---|---|
-| Client | WEB01 | HTTP / TCP 80 | Webアクセス |
+| クライアント | WEB01 | HTTP / TCP 80 | WEBアクセス |
 | WEB01 | DB01 | PostgreSQL / TCP 5432 | DB接続 |
-| Management PC | WEB01 / DB01 | SSH / TCP 22 | サーバー管理 |
+| 管理PC | WEB01 / DB01 | SSH / TCP 22 | サーバー管理 |
 
 ## 動作確認
 

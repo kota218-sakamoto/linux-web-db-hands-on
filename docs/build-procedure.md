@@ -12,7 +12,7 @@ VirtualBox上にUbuntu Serverを2台構築し、WebサーバーとDBサーバー
 構成は以下の通りです。
 
 ```text
-Client
+クライアント
   |
   | HTTP
   v
@@ -35,8 +35,8 @@ PostgreSQL
 
 | ホスト名 | 役割 | IPアドレス |
 |---|---|---|
-| WEB01 | Web Server | 192.168.100.10 |
-| DB01 | Database Server | 192.168.100.20 |
+| WEB01 | WEBサーバー | 192.168.100.10 |
+| DB01 | DBサーバー | 192.168.100.20 |
 
 ---
 
@@ -298,7 +298,7 @@ WEB01上のPHPからDB01のPostgreSQLへ接続します。
 | ポート | 5432 |
 | データベース | webappdb |
 | ユーザー | webuser |
-| Password | GitHub上では非公開 |
+| パスワード | GitHub上では非公開 |
 
 PHPでは`pg_connect()`を使用してPostgreSQLへ接続します。
 
@@ -333,7 +333,7 @@ PostgreSQLの`employees`テーブルから取得したデータがHTMLとして�
 これにより、以下の一連の通信が正常に動作していることを確認しました。
 
 ```text
-Client
+クライアント
   |
   | HTTP
   v
