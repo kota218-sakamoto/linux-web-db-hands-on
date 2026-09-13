@@ -1,4 +1,4 @@
-# TYPE  DATABASE      USER         ADDRESS             METHOD
+# 種別  データベース  ユーザー  アドレス  認証方式
 
 local   all           postgres                         peer
 local   all           all                              peer

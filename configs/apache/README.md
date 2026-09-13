@@ -1,18 +1,18 @@
-# Apache Configuration
+# Apache設定
 
 WEB01ではApacheをWebサーバーとして使用しています。
 
-## Main Settings
+## 主な設定
 
-| Item | Value |
+| 項目 | 値 |
 |---|---|
-| Listen Port | 80 |
-| Document Root | /var/www/html |
+| リッスンポート | 80 |
+| ドキュメントルート | /var/www/html |
 | VirtualHost | *:80 |
-| Error Log | /var/log/apache2/error.log |
-| Access Log | /var/log/apache2/access.log |
+| エラーログ | /var/log/apache2/error.log |
+| アクセスログ | /var/log/apache2/access.log |
 
-## Enabled Modules
+## 有効化モジュール
 
 ```text
 mpm_prefork_module
@@ -21,7 +21,7 @@ php_module
 
 PHPをApacheモジュールとして実行する構成です。
 
-## Note
+## 補足
 
 `apache2ctl -S` 実行時に、ServerName未設定による以下の警告を確認しました。
 

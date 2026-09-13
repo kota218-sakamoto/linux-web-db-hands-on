@@ -67,7 +67,7 @@ PostgreSQL 18
 
 ## 接続構成
 
-| Source | Destination | Protocol / Port | Purpose |
+| 送信元 | 宛先 | プロトコル / ポート | 用途 |
 |---|---|---|---|
 | Client | WEB01 | HTTP / TCP 80 | Webアクセス |
 | WEB01 | DB01 | PostgreSQL / TCP 5432 | DB接続 |
@@ -225,7 +225,6 @@ DB接続パスワードなどの認証情報はGitHub上には公開していま
 ```text
 linux-web-db-hands-on/
 ├── README.md
-├── .gitignore
 ├── configs/
 │   ├── apache/
 │   │   ├── 000-default.conf.example

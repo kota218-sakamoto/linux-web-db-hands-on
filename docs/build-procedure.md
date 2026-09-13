@@ -33,7 +33,7 @@ PostgreSQL
 
 ## 2. サーバー構成
 
-| Hostname | Role | IP Address |
+| ホスト名 | 役割 | IPアドレス |
 |---|---|---|
 | WEB01 | Web Server | 192.168.100.10 |
 | DB01 | Database Server | 192.168.100.20 |
@@ -172,7 +172,7 @@ GRANT SELECT ON TABLE employees TO webuser;
 
 以下のテーブルが存在することを確認しました。
 
-| Table | Owner |
+| テーブル | 所有者 |
 |---|---|
 | employees | postgres |
 
@@ -292,12 +292,12 @@ WEB01上のPHPからDB01のPostgreSQLへ接続します。
 
 接続情報は以下の通りです。
 
-| Parameter | Value |
+| パラメータ | 値 |
 |---|---|
-| Host | 192.168.100.20 |
-| Port | 5432 |
-| Database | webappdb |
-| User | webuser |
+| DBホスト | 192.168.100.20 |
+| ポート | 5432 |
+| データベース | webappdb |
+| ユーザー | webuser |
 | Password | GitHub上では非公開 |
 
 PHPでは`pg_connect()`を使用してPostgreSQLへ接続します。
