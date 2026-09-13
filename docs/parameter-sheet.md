@@ -1,82 +1,82 @@
-# Parameter Sheet
+# パラメータシート
 
-## 1. Server Information
+## 1. サーバー情報
 
-| Hostname | Role | IP Address | OS |
+| ホスト名 | 役割 | IPアドレス | OS |
 |---|---|---|---|
-| WEB01 | Web Server | 192.168.100.10 | Ubuntu Server |
-| DB01 | Database Server | 192.168.100.20 | Ubuntu Server |
+| WEB01 | WEBサーバー | 192.168.100.10 | Ubuntu Server |
+| DB01 | DBサーバー | 192.168.100.20 | Ubuntu Server |
 
 ---
 
-## 2. Network
+## 2. ネットワーク
 
-| Source | Destination | Protocol | Port | Purpose |
+| 送信元 | 宛先 | プロトコル | ポート | 用途 |
 |---|---|---|---|---|
-| Client | WEB01 | TCP | 80 | HTTP |
+| クライアント | WEB01 | TCP | 80 | HTTP |
 | WEB01 | DB01 | TCP | 5432 | PostgreSQL |
-| Management PC | WEB01 / DB01 | TCP | 22 | SSH |
+| 管理PC | WEB01 / DB01 | TCP | 22 | SSH |
 
 ---
 
 ## 3. WEB01
 
-| Item | Value |
+| 項目 | 値 |
 |---|---|
-| Hostname | WEB01 |
-| IP Address | 192.168.100.10 |
-| Web Server | Apache |
-| Application | PHP |
-| PostgreSQL Extension | php-pgsql |
-| Document Root | /var/www/html |
-| DB Test File | /var/www/html/dbtest.php |
+| ホスト名 | WEB01 |
+| IPアドレス | 192.168.100.10 |
+| WEBサーバー | Apache |
+| アプリケーション | PHP |
+| PostgreSQL拡張 | php-pgsql |
+| ドキュメントルート | /var/www/html |
+| DB接続確認ファイル | /var/www/html/dbtest.php |
 
 ---
 
 ## 4. DB01
 
-| Item | Value |
+| 項目 | 値 |
 |---|---|
-| Hostname | DB01 |
-| IP Address | 192.168.100.20 |
-| Database | PostgreSQL 18 |
-| Port | 5432 |
-| Database Name | webappdb |
-| Application User | webuser |
+| ホスト名 | DB01 |
+| IPアドレス | 192.168.100.20 |
+| データベース | PostgreSQL 18 |
+| ポート | 5432 |
+| データベース名 | webappdb |
+| アプリケーションユーザー | webuser |
 
 ---
 
-## 5. Database Objects
+## 5. データベースオブジェクト
 
-### Roles
+### ロール
 
-| Role | Purpose |
+| ロール | 用途 |
 |---|---|
-| postgres | PostgreSQL administrator |
+| postgres | PostgreSQL管理者 |
 | webuser | WEB01からのDB接続用 |
 
-### Tables
+### テーブル
 
-| Schema | Table | Owner |
+| スキーマ | テーブル | 所有者 |
 |---|---|---|
 | public | employees | postgres |
 
 ---
 
-## 6. Application DB Connection
+## 6. アプリケーションDB接続
 
-| Parameter | Value |
+| パラメータ | 値 |
 |---|---|
-| Host | 192.168.100.20 |
-| Port | 5432 |
-| Database | webappdb |
-| User | webuser |
+| DBホスト | 192.168.100.20 |
+| ポート | 5432 |
+| データベース | webappdb |
+| ユーザー | webuser |
 
 パスワードなどの認証情報はGitHub上には公開しません。
 
 ---
 
-## 7. PostgreSQL Remote Access
+## 7. PostgreSQLリモート接続
 
 WEB01からDB01へ接続できるように、PostgreSQL側で接続元を制御します。
 
@@ -96,7 +96,7 @@ host    webappdb    webuser    192.168.100.10/32    scram-sha-256
 
 ---
 
-## 8. Service Check Commands
+## 8. サービス確認コマンド
 
 ### WEB01
 
@@ -112,7 +112,7 @@ systemctl status postgresql@18-main
 
 ---
 
-## 9. Connectivity Check
+## 9. 接続確認
 
 WEB01からDB01のPostgreSQLポートへの疎通確認：
 
