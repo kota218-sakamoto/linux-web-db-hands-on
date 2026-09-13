@@ -23,6 +23,22 @@ Ver Cluster Port Status Owner    Data directory              Log file
 (1 row)
 
 
+--- Database Privileges ---
+ datname  |                         datacl                          
+----------+---------------------------------------------------------
+ webappdb | {=Tc/postgres,postgres=CTc/postgres,webuser=c/postgres}
+(1 row)
+
+
+--- employees Privileges ---
+                                   Access privileges
+ Schema |   Name    | Type  |     Access privileges      | Column privileges | Policies 
+--------+-----------+-------+----------------------------+-------------------+----------
+ public | employees | table | postgres=arwdDxtm/postgres+|                   | 
+        |           |       | webuser=r/postgres         |                   | 
+(1 row)
+
+
 --- employees ---
  id |  name  |   department   
 ----+--------+----------------

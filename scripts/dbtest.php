@@ -20,6 +20,28 @@ $result = pg_query(
 );
 
 echo "<h1>Employee List</h1>";
+echo "
+<style>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 40px;
+}
+
+h1 {
+    font-size: 32px;
+}
+
+table {
+    border-collapse: collapse;
+    font-size: 18px;
+}
+
+th, td {
+    border: 1px solid #999;
+    padding: 8px 12px;
+}
+</style>
+";
 echo "<table border='1'>";
 echo "<tr><th>ID</th><th>Name</th><th>Department</th></tr>";
 
