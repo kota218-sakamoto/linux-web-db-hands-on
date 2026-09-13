@@ -1,4 +1,4 @@
-# Build Procedure
+# 構築手順書
 
 ## 1. 構築概要
 
@@ -40,9 +40,9 @@ PostgreSQL
 
 ---
 
-## 3. WEB01 構築
+## 3. WEB01構築
 
-### Apache / PHP インストール
+### Apache / PHPインストール
 
 パッケージ一覧を更新し、Apache、PHP、PostgreSQL接続用PHPモジュールをインストールします。
 
@@ -51,7 +51,7 @@ sudo apt update
 sudo apt install apache2 php libapache2-mod-php php-pgsql -y
 ```
 
-### Apache 稼働確認
+### Apache稼働確認
 
 ```bash
 systemctl status apache2
@@ -61,16 +61,16 @@ systemctl status apache2
 
 ---
 
-## 4. DB01 構築
+## 4. DB01構築
 
-### PostgreSQL インストール
+### PostgreSQLインストール
 
 ```bash
 sudo apt update
 sudo apt install postgresql -y
 ```
 
-### PostgreSQL 稼働確認
+### PostgreSQL稼働確認
 
 ```bash
 systemctl status postgresql@18-main
@@ -78,7 +78,7 @@ systemctl status postgresql@18-main
 
 `Active: active (running)` であることを確認しました。
 
-### PostgreSQL 接続
+### PostgreSQL接続
 
 PostgreSQL管理ユーザーで接続します。
 
@@ -98,7 +98,7 @@ Webアプリケーション用データベースを作成します。
 CREATE DATABASE webappdb;
 ```
 
-### Webアプリケーション用ユーザー作成
+### WEBアプリケーション用ユーザー作成
 
 WEB01のPHPからPostgreSQLへ接続するためのユーザーを作成します。
 
@@ -128,7 +128,7 @@ CREATE USER webuser WITH PASSWORD 'CHANGE_ME';
 
 ## 6. テーブル作成・データ登録
 
-### employees テーブル作成
+### employeesテーブル作成
 
 ```sql
 CREATE TABLE employees (
@@ -176,7 +176,7 @@ GRANT SELECT ON TABLE employees TO webuser;
 |---|---|
 | employees | postgres |
 
-### employees テーブル確認
+### employeesテーブル確認
 
 ```sql
 SELECT * FROM employees;
@@ -198,11 +198,11 @@ PostgreSQLから退出します。
 
 ---
 
-## 8. PostgreSQL リモート接続設定
+## 8. PostgreSQLリモート接続設定
 
 WEB01からDB01のPostgreSQLへ接続できるように設定します。
 
-### postgresql.conf 設定
+### postgresql.conf設定
 
 PostgreSQLの設定ファイルを編集します。
 
@@ -218,7 +218,7 @@ listen_addresses = 'localhost,192.168.100.20'
 
 これにより、ローカルホスト以外からのPostgreSQL接続を受け付けられるようにします。
 
-### pg_hba.conf 設定
+### pg_hba.conf設定
 
 接続元をWEB01のみに制限するため、`pg_hba.conf` を編集します。
 
@@ -234,7 +234,7 @@ host    webappdb    webuser    192.168.100.10/32    scram-sha-256
 
 これにより、`webappdb`へ`webuser`で接続できるホストをWEB01（`192.168.100.10`）に限定します。
 
-### PostgreSQL 再起動
+### PostgreSQL再起動
 
 設定を反映します。
 
@@ -252,7 +252,7 @@ systemctl status postgresql@18-main
 
 ---
 
-## 9. WEB01 → DB01 接続確認
+## 9. WEB01 → DB01接続確認
 
 WEB01からDB01のPostgreSQLが使用するTCP/5432へ通信できることを確認します。
 
@@ -286,7 +286,7 @@ SELECT * FROM employees;
 
 ---
 
-## 10. PHP → PostgreSQL 接続設定
+## 10. PHP → PostgreSQL接続設定
 
 WEB01上のPHPからDB01のPostgreSQLへ接続します。
 
@@ -312,7 +312,7 @@ $conn = pg_connect(
 
 ---
 
-## 11. Web画面動作確認
+## 11. WEB画面動作確認
 
 WEB01上で以下のコマンドを実行します。
 
